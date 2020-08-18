@@ -22,7 +22,7 @@ locals {
   vpc_id = var.vpc_id == "" ? data.aws_vpc.default.id : var.vpc_id
 }
 
-resource "aws_instance" "zookeeper" {
+resource "aws_instance" "zookeeper_nodes" {
     ami = data.aws_ami.amazon_linux_2.id
     instance_type = var.zookeeper_instance_type
     associate_public_ip_address = true
@@ -36,7 +36,7 @@ resource "aws_instance" "zookeeper" {
     }
 }
 
-resource "aws_instance" "brokers" {
+resource "aws_instance" "kafka_brokers" {
     ami = data.aws_ami.amazon_linux_2.id
     instance_type = var.kafka_instance_type
     associate_public_ip_address = true

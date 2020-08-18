@@ -9,9 +9,21 @@
 # }
 
 output "zookeeper_nodes" {
-    value = aws_instance.zookeeper
+    value = aws_instance.zookeeper_nodes
 }
 
 output "kafka_brokers" {
-    value = aws_instance.brokers
+    value = aws_instance.kafka_brokers
+}
+
+
+resource "local_file" "ansible_hosts" {
+    filename = "./output/ansible_hosts"
+    content = templatefile(
+        "${path.module}/templates/ansible_hosts.tpl",
+        {
+            zookeeper_nodes = aws_instance.zookeeper_nodes,
+            kafka_brokers = aws_instance.kafka_brokers
+        }
+    )
 }

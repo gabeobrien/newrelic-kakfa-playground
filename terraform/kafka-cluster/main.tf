@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 module "kafka_cluster" {
-    source = "./modules/kafka-cluster"
+    source = "../modules/kafka-cluster"
     aws_region = var.aws_region
     vpc_id = var.vpc_id
     zookeeper_instance_type = var.zookeeper_instance_type
