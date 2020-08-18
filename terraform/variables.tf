@@ -7,6 +7,11 @@ variable "aws_profile" {
     default = "default"
 }
 
+variable "vpc_id" {
+    type = string
+    default = ""
+}
+
 variable "zookeeper_instance_type" {
     type = string
     default = "t3.small"
