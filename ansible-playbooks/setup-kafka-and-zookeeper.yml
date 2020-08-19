@@ -17,6 +17,8 @@
       sansible_zookeeper_java_version: 11
       #sansible_zookeeper_hosts: "{{ groups['zookeepernodes'] | map(attribute='private_ip') | list }}"
       sansible_zookeeper_hosts: "{{ zknodes }}"
+  tags:
+    - zookeeper
 
 
 
@@ -24,7 +26,7 @@
   hosts: kafkabrokers
   pre_tasks:
     - set_fact:
-        zknodes: "{{ zknodes }} + [ '{{ hostvars[item]['private_ip] }}:{{sansible_zookeeper_port}}' ]"
+        zknodes: "{{ zknodes }} + [ '{{ hostvars[item][\'private_ip\'] }}:{{ zookeeper_client_port }}' ]"
       with_items: "{{ groups['zookeepernodes'] | list}}"
       vars:
         zknodes: []
@@ -38,7 +40,9 @@
     - name: sansible.kafka
       sansible_kafka_java_version: 11
       #sansible_kafka_zookeeper_hosts: "{{ groups['zookeepernodes'] | map(attribute='private_ip') | product(sansible_zookeeper_port) | map('join', ':') | list}}"
-      sansible_zookeeper_hosts: "{{ zknodes }}"
+      sansible_kafka_zookeeper_hosts: "{{ zknodes }}"
       sansible_kafka_server_properties:
         broker.id: "{{ broker_id }}"
         advertised.listeners: "PLAINTEXT://{{public_ip}}:{{ sansible_kafka_port }}"
+  tags:
+    - kafka
