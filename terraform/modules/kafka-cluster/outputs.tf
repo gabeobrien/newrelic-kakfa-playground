@@ -18,7 +18,7 @@ output "kafka_brokers" {
 
 
 resource "local_file" "ansible_hosts" {
-    filename = "./output/ansible_hosts"
+    filename = "./output/ansible_hosts.yml"
     content = templatefile(
         "${path.module}/templates/ansible_hosts.tpl",
         {
