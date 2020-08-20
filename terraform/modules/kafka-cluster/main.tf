@@ -34,6 +34,7 @@ resource "aws_instance" "zookeeper_nodes" {
     tags = {
       Name = "newrelic-kafka-playground-zookeeper-${count.index}"
       Role = "zookeeper"
+      my_id = "${count.index}"
     }
 }
 

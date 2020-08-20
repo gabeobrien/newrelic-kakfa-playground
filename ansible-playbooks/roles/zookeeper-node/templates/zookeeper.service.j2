@@ -1,0 +1,15 @@
+[Unit]
+Description=Zookeeper (bundled with kafka)
+After=network.target network-online.target remote-fs.target
+
+[Service]
+Type=simple
+User={{ zookeeper_user }}
+Group={{ zookeeper_user }}
+Environment="LOG_DIR={{ zookeeper_log_dir }}"
+ExecStart={{ zookeeper_home }}/bin/zookeeper-server-start.sh {{ zookeeper_properties_file }}
+ExecStop={{ zookeeper_home }}/bin/zookeeper-server-start.sh
+PIDFile=/var/run/zookeeper.pid
+
+[Install]
+WantedBy=multi-user.target

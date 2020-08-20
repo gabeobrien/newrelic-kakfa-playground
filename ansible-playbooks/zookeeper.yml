@@ -1,0 +1,5 @@
+---
+- name: Zookeeper
+  hosts: zookeepernodes
+  roles:
+    - zookeeper-node

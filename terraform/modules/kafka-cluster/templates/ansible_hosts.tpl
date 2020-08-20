@@ -1,6 +1,4 @@
 all:
-    vars:
-        ansible_user: ubuntu
     children:
         zookeepernodes:
             hosts:
@@ -9,6 +7,7 @@ all:
                     ansible_host: ${node.public_ip}
                     public_ip: ${node.public_ip}
                     private_ip: ${node.private_ip}
+                    my_id: ${node.tags["my_id"]}
                 %{~ endfor ~}
         kafkabrokers:
             hosts:

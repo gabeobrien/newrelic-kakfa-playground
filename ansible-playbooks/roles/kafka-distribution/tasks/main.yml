@@ -12,15 +12,6 @@
     dest: "/home/{{ kafka_user }}/{{ kafka_download_filename }}"
     url: "{{ kafka_download_url }}"
     
-# - name: Create install dir
-#   become: yes
-#   file:
-#     state: directory
-#     path: "{{ kafka_versioned_home_dir }}"
-#     owner: "{{ kafka_user }}"
-#     group: "{{ kafka_user }}"
-# - debug:
-#     var: kafka_versioned_home_dir
 - name: Uncompress the kafka tar
   become: yes
   unarchive:

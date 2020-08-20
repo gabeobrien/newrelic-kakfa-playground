@@ -1,0 +1,2 @@
+zookeeper_properties_file: "{{ zookeeper_home }}/config/zookeeper.ansible.properties"
+zookeeper_myid_file: "{{ zookeeper_data_dir }}/myid"

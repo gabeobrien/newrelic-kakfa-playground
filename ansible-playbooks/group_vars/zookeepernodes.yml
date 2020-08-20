@@ -1,0 +1,4 @@
+ansible_user: ubuntu
+client_port: 2181
+leader_port: 2888
+election_port: 3888
