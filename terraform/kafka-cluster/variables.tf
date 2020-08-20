@@ -14,7 +14,7 @@ variable "vpc_id" {
 
 variable "zookeeper_instance_type" {
     type = string
-    default = "t3.small"
+    default = "t3a.small"
 }
 
 variable "zookeeper_num_nodes" {
@@ -24,7 +24,7 @@ variable "zookeeper_num_nodes" {
 
 variable "kafka_instance_type" {
     type = string
-    default = "t3.small"
+    default = "t3a.small"
 }
 
 variable "kafka_num_brokers" {

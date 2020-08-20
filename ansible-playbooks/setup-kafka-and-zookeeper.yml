@@ -15,6 +15,8 @@
   roles:
     - name: sansible.zookeeper
       sansible_zookeeper_java_version: 11
+      sansible_zookeeper_version: 3.5.8
+      sansible_zookeeper_download_url: "http://apache.mirror.anlx.net/zookeeper/zookeeper-{{ sansible_zookeeper_version }}/apache-zookeeper-{{ sansible_zookeeper_version }}.tar.gz"
       #sansible_zookeeper_hosts: "{{ groups['zookeepernodes'] | map(attribute='private_ip') | list }}"
       sansible_zookeeper_hosts: "{{ zknodes }}"
   tags:
@@ -39,6 +41,8 @@
   roles:
     - name: sansible.kafka
       sansible_kafka_java_version: 11
+      sansible_kafka_version_kafka: 2.6.0
+      sansible_kafka_version_scala: 2.13
       #sansible_kafka_zookeeper_hosts: "{{ groups['zookeepernodes'] | map(attribute='private_ip') | product(sansible_zookeeper_port) | map('join', ':') | list}}"
       sansible_kafka_zookeeper_hosts: "{{ zknodes }}"
       sansible_kafka_server_properties:
