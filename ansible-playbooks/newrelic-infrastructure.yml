@@ -1,0 +1,31 @@
+- hosts: zookeeper
+  vars:
+    kafka_config_file: /etc/newrelic-infra/integrations.d/kafka-config.yml
+    logging_config_file: /etc/newrelic-infra/logging.d/zookeeper.yml
+  roles:
+    - name: newrelic.newrelic-infra
+      vars:
+        nrinfragent_config:
+          license_key: {{ new_relic_license_key }}
+          verbose: 3
+          log_format: json
+        nrinfragent_integrations:
+          - { name: nri-kafka, state: "latest" }
+  tasks:
+  - name: Create kafka config file
+    become: yes
+    template:
+      dest: "{{ kafka_config_file }}"
+      owner: "{{ zookeeper_user }}"
+      group: "{{ zookeeper_user }}"
+      mode: 0755
+      src: templates/kafka-config.yml.j2
+      
+  - name: Create logging config file
+    become: yes
+    template:
+      dest: "{{ logging_config_file }}"
+      owner: "{{ zookeeper_user }}"
+      group: "{{ zookeeper_user }}"
+      mode: 0755
+      src: templates/kafka-config.yml.j2
