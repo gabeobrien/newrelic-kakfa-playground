@@ -1,0 +1,50 @@
+---
+- set_fact:
+    listener_strings: "{{ listener_strings }} + [ '{{ item.protocol }}://{{ item.host }}:{{ item.port }}' ]"
+  with_items: "{{ listeners }}"
+  vars:
+    listener_strings: []
+- set_fact:
+    advertised_listener_strings: "{{ advertised_listener_strings }} + [ '{{ item.protocol }}://{{ item.host }}:{{ item.port }}' ]"
+  with_items: "{{ advertised_listeners }}"
+  vars:
+    advertised_listener_strings: []
+- name: Create data dir
+  become: yes
+  file:
+    state: directory
+    path: "{{ kafka_data_dir }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    
+- name: Create log dir
+  become: yes
+  file:
+    state: directory
+    path: "{{ kafka_log_dir }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+
+- name: Create kafka properties file
+  become: yes
+  template:
+    dest: "{{ kafka_properties_file }}"
+    owner: "{{ kafka_user }}"
+    group: "{{ kafka_user }}"
+    mode: 0755
+    src: kafka.properties.j2
+  notify:
+    - restart kafka
+      
+- name: Create kafka service
+  become: yes
+  template:
+    dest: "{{ kafka_service }}"
+    mode: 0755
+    owner: root
+    src: kafka.service.j2
+  notify:
+    - reload kafka
+    - restart kafka
+
+    

@@ -1,0 +1,24 @@
+---
+- name: start kafka
+  become: yes
+  systemd:
+    name: kafka
+    state: started
+
+- name: stop kafka
+  become: yes
+  systemd:
+    name: kafka
+    state: stopped
+
+- name: restart kafka
+  become: yes
+  systemd:
+    name: kafka
+    state: restarted
+
+- name: reload kafka
+  become: yes
+  systemd:
+    name: kafka
+    daemon_reload: yes

@@ -2,3 +2,6 @@ ansible_user: ubuntu
 client_port: 2181
 leader_port: 2888
 election_port: 3888
+server_log: /var/opt/zookeeper/server.log
+logging_tag_name: zookeeper
+service_name: zookeeper.service

@@ -1,0 +1,16 @@
+kafka_user: kafka
+kafka_home: /opt/kafka
+kakfa_service: /etc/systemd/system/zookeeper.service
+kakfa_data_dir: /var/opt/zookeeper
+kafka_log_dir: /var/log/zookeeper
+kafka_port: 9092
+
+listeners:
+  - protocol: PLAINTEXT
+    host: 0.0.0.0
+    port: 9092
+    
+advertised_listeners:
+  - protocol: PLAINTEXT
+    host: 127.0.0.1
+    port: 9092
