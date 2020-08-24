@@ -1,5 +1,0 @@
-zookeeper_user: kafka
-zookeeper_home: /opt/kafka
-zookeeper_service: /etc/systemd/system/zookeeper.service
-zookeeper_data_dir: /var/opt/zookeeper
-zookeeper_log_dir: /var/log/zookeeper

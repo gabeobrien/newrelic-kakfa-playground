@@ -1,6 +1,6 @@
 ---
-- name: Zookeeper
-  hosts: zookeepernodes
+- name: Kafka
+  hosts: kafkabrokers
   become: yes
   roles:
     - name: newrelic.newrelic-infra
@@ -13,10 +13,14 @@
           log_format: json
     - name: logging
       vars:
-        service_name: zookeeper.service
-        logging_tag_name: zookeeper
-        server_log: /var/log/zookeeper/server.log
-    - name: kafka-integration
+        logging_tag_name: kafka
+        server_log: /var/log/kafka/server.log
     - name: service
       vars:
-        service: zookeeper
+        service: kafka
+        advertised_listeners:
+          - protocol: PLAINTEXT
+            host: "{{ private_ip }}"
+            port: "{{ advertised_listener_port }}"
+            
+        

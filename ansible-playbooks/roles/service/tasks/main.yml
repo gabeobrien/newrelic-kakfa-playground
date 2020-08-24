@@ -1,0 +1,21 @@
+---
+- assert:
+    that:
+      - service is defined
+      - service in ['kafka', 'zookeeper']
+    fail_msg: Variable \"service\" must be set to either \"kafka\" or \"zookeper\".
+    success_msg: "Variable \"service\" is set to \"{{ service }}\" proceeding with {{ service }} configuration"
+
+- name: Include the service-specific (zookeeper or kafka) variables
+  include_vars:
+    file: "defaults/{{ service }}.yml"
+    
+- name: Configure Servive
+  include: configure.yml
+  tags:
+    - configure
+
+- name: Start Service
+  include: run.yml
+  tags:
+    - run

@@ -1,6 +1,0 @@
----
-- name: Start Zookeeper
-  become: yes
-  systemd:
-    name: zookeeper
-    state: started

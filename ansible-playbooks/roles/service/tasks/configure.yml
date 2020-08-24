@@ -1,0 +1,66 @@
+---
+- set_fact:
+    listener_strings: "{{ listener_strings }} + [ '{{ item.protocol }}://{{ item.host }}:{{ item.port }}' ]"
+  with_items: "{{ listeners }}"
+  vars:
+    listener_strings: []
+  when: service == 'kafka'
+- set_fact:
+    advertised_listener_strings: "{{ advertised_listener_strings }} + [ '{{ item.protocol }}://{{ item.host }}:{{ item.port }}' ]"
+  with_items: "{{ advertised_listeners }}"
+  vars:
+    advertised_listener_strings: []
+  when: service == 'kafka'
+    
+- name: Create data dir
+  file:
+    state: directory
+    path: "{{ service_data_dir }}"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+  notify:
+    - restart service
+    
+- name: Create log dir
+  file:
+    state: directory
+    path: "{{ service_log_dir }}"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+  notify:
+    - restart service
+    
+- name: Create myid file
+  template:
+    dest: "{{ zookeeper_myid_file }}"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    mode: 0755
+    src: myid.j2
+  when: service == 'zookeeper'
+  notify:
+    - restart service
+
+- name: Create properties file
+  become: yes
+  template:
+    dest: "{{ service_properties_file }}"
+    owner: "{{ service_user }}"
+    group: "{{ service_user }}"
+    mode: 0755
+    src: "{{service}}.properties.j2"
+  notify:
+    - restart service
+      
+- name: Create service
+  become: yes
+  template:
+    dest: "{{ service_file }}"
+    mode: 0755
+    owner: root
+    src: "service.j2"
+  notify:
+    - reload service
+    - restart service
+
+    

@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 # the directory where the snapshot is stored.
-dataDir={{ zookeeper_data_dir }}
+dataDir={{ service_data_dir }}
 # the port at which the clients will connect
 clientPort={{ client_port }}
 # disable the per-ip limit on the number of connections since this is a non-production config

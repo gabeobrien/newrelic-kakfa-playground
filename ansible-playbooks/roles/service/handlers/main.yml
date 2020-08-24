@@ -1,0 +1,24 @@
+---
+- name: start service
+  become: yes
+  systemd:
+    name: "{{ service }}"
+    state: started
+
+- name: stop service
+  become: yes
+  systemd:
+    name: "{{ service }}"
+    state: stopped
+
+- name: restart service
+  become: yes
+  systemd:
+    name: "{{ service }}"
+    state: restarted
+
+- name: reload service
+  become: yes
+  systemd:
+    name: "{{ service }}"
+    daemon_reload: yes

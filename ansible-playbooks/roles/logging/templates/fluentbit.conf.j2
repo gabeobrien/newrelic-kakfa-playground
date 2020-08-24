@@ -4,19 +4,19 @@
     Path {{ server_log }}
     Parser kafka-log
 
-[INPUT]
-    Name systemd
-    Tag {{ logging_tag_name }}.service
-    Systemd_Filter _SYSTEMD_UNIT={{ service_name }}
-    Parser kafka-log
+#[INPUT]
+#    Name systemd
+#    Tag {{ logging_tag_name }}.service
+#    Systemd_Filter _SYSTEMD_UNIT={{ service_name }}
+#    Parser kafka-log
     
 [FILTER]
     Name record_modifier
     Match {{ logging_tag_name }}.server
     Record logtype {{ logging_tag_name }}-server
 
-[FILTER]
-    Name record_modifier
-    Match {{ logging_tag_name }}.service
-    Record logtype {{ logging_tag_name }}-systemd
+#[FILTER]
+#    Name record_modifier
+#    Match {{ logging_tag_name }}.service
+#    Record logtype {{ logging_tag_name }}-systemd
     
