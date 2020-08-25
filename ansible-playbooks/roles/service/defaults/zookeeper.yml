@@ -1,3 +1,0 @@
-service_description: Zookeeper (bundled with kafka)
-service_start_command: "{{ service_home }}/bin/zookeeper-server-start.sh {{ service_properties_file }}"
-service_stop_command: "{{ service_home }}/bin/zookeeper-server-stop.sh"

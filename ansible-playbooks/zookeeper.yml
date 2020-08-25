@@ -1,22 +1,6 @@
 ---
-- name: Zookeeper
+- name: Create Zookeeper Service
   hosts: zookeepernodes
   become: yes
   roles:
-    - name: newrelic.newrelic-infra
-      vars:
-        nrinfragent_config:
-          license_key: "{{ new_relic_license_key }}"
-          log_file: /var/log/nr-infra.log
-          log_to_stdout: false
-          verbose: 1
-          log_format: json
-    - name: logging
-      vars:
-        service_name: zookeeper.service
-        logging_tag_name: zookeeper
-        server_log: /var/log/zookeeper/server.log
-    - name: kafka-integration
-    - name: service
-      vars:
-        service: zookeeper
+    - name: zookeeper-node

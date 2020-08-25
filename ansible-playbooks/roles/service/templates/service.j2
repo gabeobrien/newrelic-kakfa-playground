@@ -9,7 +9,7 @@ Group={{ service_user }}
 Environment="LOG_DIR={{ service_log_dir }}"
 ExecStart={{ service_start_command }}
 ExecStop={{ service_stop_command }}
-PIDFile=/var/run/{{ service }}.pid
+PIDFile=/var/run/{{ service_name }}.pid
 
 [Install]
 WantedBy=multi-user.target

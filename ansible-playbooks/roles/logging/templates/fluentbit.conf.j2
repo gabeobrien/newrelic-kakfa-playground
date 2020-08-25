@@ -2,7 +2,8 @@
     Name tail
     Tag {{ logging_tag_name }}.server
     Path {{ server_log }}
-    Parser kafka-log
+    Multiline On
+    Parser_Firstline kafka-log
 
 #[INPUT]
 #    Name systemd

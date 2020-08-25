@@ -1,13 +1,11 @@
 ---
 - name: Install New Relic Kafka Integration
-  become: yes
   apt:
     name: nri-kafka
     state: latest
     update_cache: yes
     
 - name: Create kafka integration config file
-  become: yes
   template:
     dest: "{{ kafka_integration_config_file }}"
     mode: 0755

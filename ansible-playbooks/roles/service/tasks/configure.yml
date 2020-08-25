@@ -1,16 +1,4 @@
 ---
-- set_fact:
-    listener_strings: "{{ listener_strings }} + [ '{{ item.protocol }}://{{ item.host }}:{{ item.port }}' ]"
-  with_items: "{{ listeners }}"
-  vars:
-    listener_strings: []
-  when: service == 'kafka'
-- set_fact:
-    advertised_listener_strings: "{{ advertised_listener_strings }} + [ '{{ item.protocol }}://{{ item.host }}:{{ item.port }}' ]"
-  with_items: "{{ advertised_listeners }}"
-  vars:
-    advertised_listener_strings: []
-  when: service == 'kafka'
     
 - name: Create data dir
   file:
@@ -19,7 +7,7 @@
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
   notify:
-    - restart service
+    - "restart {{ service_name }}"
     
 - name: Create log dir
   file:
@@ -28,18 +16,7 @@
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
   notify:
-    - restart service
-    
-- name: Create myid file
-  template:
-    dest: "{{ zookeeper_myid_file }}"
-    owner: "{{ service_user }}"
-    group: "{{ service_user }}"
-    mode: 0755
-    src: myid.j2
-  when: service == 'zookeeper'
-  notify:
-    - restart service
+    - "restart {{ service_name }}"
 
 - name: Create properties file
   become: yes
@@ -48,9 +25,9 @@
     owner: "{{ service_user }}"
     group: "{{ service_user }}"
     mode: 0755
-    src: "{{service}}.properties.j2"
+    src: "{{ service_properties_template }}"
   notify:
-    - restart service
+    - "restart {{ service_name }}"
       
 - name: Create service
   become: yes
@@ -60,7 +37,7 @@
     owner: root
     src: "service.j2"
   notify:
-    - reload service
-    - restart service
+    - "reload {{ service_name }}"
+    - "restart {{ service_name }}"
 
     

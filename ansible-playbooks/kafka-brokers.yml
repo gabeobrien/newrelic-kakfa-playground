@@ -1,20 +1,7 @@
 ---
-- name: Kafka
+- name: Create Kafka Service
   hosts: kafkabrokers
   become: yes
-  roles:
-    - name: newrelic.newrelic-infra
-      vars:
-        nrinfragent_config:
-          license_key: "{{ new_relic_license_key }}"
-          log_file: /var/log/nr-infra.log
-          log_to_stdout: false
-          verbose: 1
-          log_format: json
-    - name: logging
-      vars:
-        logging_tag_name: kafka
-        server_log: /var/log/kafka/server.log
     - name: service
       vars:
         service: kafka

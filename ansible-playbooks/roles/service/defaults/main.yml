@@ -1,7 +1,0 @@
-service_user: kafka
-service_home: /opt/kafka
-service_file: "/etc/systemd/system/{{ service }}.service"
-service_data_dir: /var/opt/{{ service }}
-service_log_dir: /var/log/{{ service }}
-service_properties_file: "{{ service_home }}/config/{{ service }}.ansible.properties"
-zookeeper_myid_file: "{{ service_data_dir }}/myid"

@@ -1,14 +1,35 @@
-- hosts: zookeeper
-  vars:
+---
+- name: Install New Relic Infrastructure on Zookeeper Nodes
+  hosts: zookeepernodes
+  become: yes
   roles:
     - name: newrelic.newrelic-infra
       vars:
         nrinfragent_config:
-          license_key: {{ new_relic_license_key }}
-          verbose: 3
+          license_key: "{{ new_relic_license_key }}"
+          log_file: /var/log/nr-infra.log
+          log_to_stdout: false
+          verbose: 1
           log_format: json
-        nrinfragent_integrations: {{ nrinfragent_integrations }}
-
-  # tasks:
-
-      
+    - name: logging
+      vars:
+        logging_tag_name: zookeeper
+        server_log: /var/log/zookeeper/server.log
+    - name: kafka-integration
+    
+- name: Install New Relic Infrastructure on Kafka Brokers
+  hosts: kafkabrokers
+  become: yes
+  roles:
+    - name: newrelic.newrelic-infra
+      vars:
+        nrinfragent_config:
+          license_key: "{{ new_relic_license_key }}"
+          log_file: /var/log/nr-infra.log
+          log_to_stdout: false
+          verbose: 1
+          log_format: json
+    - name: logging
+      vars:
+        logging_tag_name: zookeeper
+        server_log: /var/log/zookeeper/server.log
