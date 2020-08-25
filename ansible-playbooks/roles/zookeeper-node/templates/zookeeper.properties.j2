@@ -1,5 +1,6 @@
 # {{ ansible_managed }}
 
+tickTime=2000
 # the directory where the snapshot is stored.
 dataDir={{ service_data_dir }}
 # the port at which the clients will connect
@@ -13,6 +14,8 @@ admin.enableServer=false
 
 {# list servers in a multi-server environment #}
 {% if groups['zookeepernodes'] | length > 1 %}
+initLimit=5
+syncLimit=2
 # specify all zookeeper servers
 # The first port is used by followers to connect to the leader
 # The second one is used for leader election

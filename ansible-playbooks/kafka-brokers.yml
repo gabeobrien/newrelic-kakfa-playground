@@ -2,12 +2,11 @@
 - name: Create Kafka Service
   hosts: kafkabrokers
   become: yes
-    - name: service
+  roles:
+    - name: kafka-broker
       vars:
-        service: kafka
-        advertised_listeners:
+        kafka_advertised_listeners:
           - protocol: PLAINTEXT
             host: "{{ private_ip }}"
             port: "{{ advertised_listener_port }}"
             
-        

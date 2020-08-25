@@ -7,7 +7,7 @@
     
 - name: Create kafka integration config file
   template:
-    dest: "{{ kafka_integration_config_file }}"
+    dest: "{{ newrelic_kafka_integration_config_file }}"
     mode: 0755
     src: kafka-integration-config.yml.j2
   notify:

@@ -15,7 +15,7 @@
       vars:
         logging_tag_name: zookeeper
         server_log: /var/log/zookeeper/server.log
-    - name: kafka-integration
+    - name: newrelic-kafka-integration
     
 - name: Install New Relic Infrastructure on Kafka Brokers
   hosts: kafkabrokers
@@ -31,5 +31,5 @@
           log_format: json
     - name: logging
       vars:
-        logging_tag_name: zookeeper
-        server_log: /var/log/zookeeper/server.log
+        logging_tag_name: kafka
+        server_log: /var/log/kafka/server.log

@@ -1,6 +1,0 @@
----
-- name: Start Kafka
-  become: yes
-  systemd:
-    name: kafka
-    state: started
