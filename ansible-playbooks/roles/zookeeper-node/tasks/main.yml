@@ -14,6 +14,7 @@
     service_description: "{{ zk_service_description }}"
     service_start_command: "{{ zk_start_command }}"
     service_stop_command: "{{ zk_stop_command }}"
+    service_jmx_port: "{{ zk_jmx_port }}"
         
 - name: Create Zookeeper myid file
   template:

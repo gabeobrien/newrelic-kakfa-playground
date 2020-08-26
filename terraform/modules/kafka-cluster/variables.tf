@@ -2,6 +2,14 @@ variable "aws_region" {
     type = string
 }
 
+variable "project_name" {
+    type = string
+}
+
+variable "new_relic_license_key" {
+    type = string
+}
+
 variable "vpc_id" {
     type = string
     default = ""

@@ -39,6 +39,13 @@ resource "aws_security_group" "kafka_cluster_sg" {
         description = "Kafka Brokers"
     }
     ingress {
+        from_port = 0
+        to_port = 65535
+        protocol = "tcp"
+        self = true
+        description = "Internal security group (for JMX, etc)"
+    }
+    ingress {
         from_port = -1
         to_port = -1
         protocol = "icmp"
@@ -55,5 +62,6 @@ resource "aws_security_group" "kafka_cluster_sg" {
 
     tags = {
         Name = "newrelic_kafka_playground_cluster_sg"
+        Project = var.project_name
     }
 }

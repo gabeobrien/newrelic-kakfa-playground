@@ -10,6 +10,9 @@ kafka_service_name: kafka
 kafka_service_description: Apache Kafka
 kafka_start_command: "{{ kafka_home }}/bin/kafka-server-start.sh {{ kafka_properties_file }}"
 kafka_stop_command: "{{ kafka_home }}/bin/kafka-server-stop.sh"
+kafka_num_partitions: "{{ groups['kafkabrokers'] | length }}"
+kafka_retention_ms: 3600000 # 1 hour
+kafka_jmx_port: 9997
 
 kafka_listeners:
   - protocol: PLAINTEXT

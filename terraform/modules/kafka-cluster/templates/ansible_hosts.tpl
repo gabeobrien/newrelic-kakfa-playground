@@ -1,4 +1,7 @@
 all:
+    vars:
+        project_name: ${project_name}
+        new_relic_license_key: ${new_relic_license_key}
     children:
         zookeepernodes:
             hosts:

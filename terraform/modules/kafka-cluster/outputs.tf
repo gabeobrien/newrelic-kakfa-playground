@@ -22,8 +22,10 @@ resource "local_file" "ansible_hosts" {
     content = templatefile(
         "${path.module}/templates/ansible_hosts.tpl",
         {
-            zookeeper_nodes = aws_instance.zookeeper_nodes,
+            new_relic_license_key = var.new_relic_license_key
+            zookeeper_nodes = aws_instance.zookeeper_nodes
             kafka_brokers = aws_instance.kafka_brokers
+            project_name = var.project_name
         }
     )
 }

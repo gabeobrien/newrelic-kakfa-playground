@@ -7,6 +7,15 @@ variable "aws_profile" {
     default = "default"
 }
 
+variable "new_relic_license_key" {
+    type = string
+}
+
+variable "project_name" {
+    type = string
+    default = "newrelic-kakfa-playground"
+}
+
 variable "vpc_id" {
     type = string
     default = ""

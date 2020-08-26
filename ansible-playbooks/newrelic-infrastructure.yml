@@ -9,8 +9,11 @@
           license_key: "{{ new_relic_license_key }}"
           log_file: /var/log/nr-infra.log
           log_to_stdout: false
-          verbose: 1
           log_format: json
+          custom_attributes:
+            project: "{{ project_name }}"
+            role: "zookeeper_node"
+            zookeeper_my_id: "{{ my_id }}"
     - name: logging
       vars:
         logging_tag_name: zookeeper
@@ -27,8 +30,11 @@
           license_key: "{{ new_relic_license_key }}"
           log_file: /var/log/nr-infra.log
           log_to_stdout: false
-          verbose: 1
           log_format: json
+          custom_attributes:
+            project: "{{ project_name }}"
+            role: "kafka_broker"
+            kafka_broker_id: "{{ broker_id }}"
     - name: logging
       vars:
         logging_tag_name: kafka

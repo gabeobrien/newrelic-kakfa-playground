@@ -25,4 +25,5 @@
     service_description: "{{ kafka_service_description }}"
     service_start_command: "{{ kafka_start_command }}"
     service_stop_command: "{{ kafka_stop_command }}"
-        
+    service_jmx_port: "{{ kafka_jmx_port }}"
+    

@@ -33,8 +33,9 @@ resource "aws_instance" "zookeeper_nodes" {
     
     tags = {
       Name = "newrelic-kafka-playground-zookeeper-${count.index}"
-      Role = "zookeeper"
+      Role = "zookeeper-node"
       my_id = "${count.index}"
+      Project = var.project_name
     }
 }
 
@@ -49,7 +50,8 @@ resource "aws_instance" "kafka_brokers" {
     
     tags = {
       Name = "newrelic-kafka-playground-broker-${count.index}"
-      Role = "kafka broker"
+      Role = "kafka-broker"
       broker_id = "${count.index}"
+      Project = var.project_name
     }
 }

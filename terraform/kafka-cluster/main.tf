@@ -13,6 +13,8 @@ provider "aws" {
 
 module "kafka_cluster" {
     source = "../modules/kafka-cluster"
+    project_name = var.project_name
+    new_relic_license_key = var.new_relic_license_key
     aws_region = var.aws_region
     vpc_id = var.vpc_id
     zookeeper_instance_type = var.zookeeper_instance_type
