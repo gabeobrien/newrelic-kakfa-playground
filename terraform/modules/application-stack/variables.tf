@@ -19,19 +19,11 @@ variable "security_group_ids" {
     type = list(string)
 }
 
-variable "zookeeper_instance_type" {
+variable "instance_type" {
     type = string
 }
 
-variable "zookeeper_num_nodes" {
-    type = number
-}
-
-variable "kafka_instance_type" {
-    type = string
-}
-
-variable "kafka_num_brokers" {
+variable "num_nodes" {
     type = number
 }
 

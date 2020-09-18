@@ -1,6 +1,6 @@
-resource "aws_security_group" "kafka_cluster_sg" {
-    name = "newrelic_kafka_playground_cluster_sg"
-    description = "Accept incoming connections for SSH, ZooKeeper, Kafka Brokers. Allow egress for all."
+resource "aws_security_group" "kafka_playground_sg" {
+    name = "newrelic_kafka_playground_sg"
+    description = "Security group for the New Relic Kafka Playground.  Assuming that all ZooKeeper nodes, Kafka Brokers, and application hosts are in the same SG."
 
     ingress {
         from_port = 22
@@ -43,7 +43,7 @@ resource "aws_security_group" "kafka_cluster_sg" {
         to_port = 65535
         protocol = "tcp"
         self = true
-        description = "Internal security group (for JMX, etc)"
+        description = "Internal security group. Allow everything."
     }
     ingress {
         from_port = -1
@@ -61,7 +61,7 @@ resource "aws_security_group" "kafka_cluster_sg" {
     vpc_id = local.vpc_id
 
     tags = {
-        Name = "newrelic_kafka_playground_cluster_sg"
+        Name = "newrelic_kafka_playground_sg"
         Project = var.project_name
     }
 }

@@ -28,7 +28,7 @@ variable "zookeeper_instance_type" {
 
 variable "zookeeper_num_nodes" {
     type = number
-    default = 1
+    default = 3
 }
 
 variable "kafka_instance_type" {
@@ -37,6 +37,16 @@ variable "kafka_instance_type" {
 }
 
 variable "kafka_num_brokers" {
+    type = number
+    default = 6
+}
+
+variable "application_stack_instance_type" {
+    type = string
+    default = "t3a.large"
+}
+
+variable "application_stack_num_nodes" {
     type = number
     default = 2
 }

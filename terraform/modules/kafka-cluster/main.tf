@@ -27,7 +27,7 @@ resource "aws_instance" "zookeeper_nodes" {
     instance_type = var.zookeeper_instance_type
     associate_public_ip_address = true
     key_name = var.key_name
-    vpc_security_group_ids = [aws_security_group.kafka_cluster_sg.id]
+    vpc_security_group_ids = var.security_group_ids
     
     count = var.zookeeper_num_nodes
     
@@ -44,7 +44,7 @@ resource "aws_instance" "kafka_brokers" {
     instance_type = var.kafka_instance_type
     associate_public_ip_address = true
     key_name = var.key_name
-    vpc_security_group_ids = [aws_security_group.kafka_cluster_sg.id]
+    vpc_security_group_ids = var.security_group_ids
     
     count = var.kafka_num_brokers
     
