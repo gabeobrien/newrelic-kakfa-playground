@@ -33,14 +33,23 @@
     - provision
     - swarm
   tasks:
+    - name: Get swarm status
+      shell: "docker info | awk '/Swarm: (.+)/ { print $2 }'"
+      register: swarm_status
     - name: Join swarm as manager
       command: "docker swarm join --token {{ hostvars[groups['swarm_managers'][0]]['manager_token']['stdout'] }} {{ hostvars[groups['swarm_managers'][0]]['private_ip'] }}"
-
+      when: swarm_status.stdout != 'active'
+      
 - hosts: swarm_workers
   become: yes
   tags:
     - provision
     - swarm
   tasks:
+    - name: Get swarm status
+      shell: "docker info | awk '/Swarm: (.+)/ { print $2 }'"
+      register: swarm_status
     - name: Join swarm as worker
       command: "docker swarm join --token {{ hostvars[groups['swarm_managers'][0]]['worker_token']['stdout'] }} {{ hostvars[groups['swarm_managers'][0]]['private_ip'] }}"
+      when: swarm_status.stdout != 'active'
+      
