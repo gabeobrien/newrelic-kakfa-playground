@@ -46,6 +46,13 @@ resource "aws_security_group" "kafka_playground_sg" {
         description = "Internal security group. Allow everything."
     }
     ingress {
+        from_port = 0
+        to_port = 65535
+        protocol = "udp"
+        self = true
+        description = "Internal security group. Allow everything."
+    }
+    ingress {
         from_port = -1
         to_port = -1
         protocol = "icmp"
