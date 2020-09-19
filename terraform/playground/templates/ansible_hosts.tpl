@@ -21,20 +21,24 @@ all:
                     private_ip: ${node.private_ip}
                     broker_id: ${node.tags["broker_id"]}
                 %{~ endfor ~}
-        swarm_manager:
-            ansible_host: ${swarm_nodes[0].public_ip}
-            public_ip: ${swarm_nodes[0].public_ip}
-            private_ip: ${swarm_nodes[0].private_ip}
-        swarm_workers:
+        swarm_managers:
             hosts:
-                %{~ for node in swarm_nodes if not list.first ~}
+                %{~ for node in swarm_managers ~}
                 ${node.tags["Name"]}:
                     ansible_host: ${node.public_ip}
                     public_ip: ${node.public_ip}
                     private_ip: ${node.private_ip}
                 %{~ endfor ~}
-        swarm_all:
+        swarm_workers:
+            hosts:
+                %{~ for node in swarm_workers ~}
+                ${node.tags["Name"]}:
+                    ansible_host: ${node.public_ip}
+                    public_ip: ${node.public_ip}
+                    private_ip: ${node.private_ip}
+                %{~ endfor ~}
+        swarm_nodes:
             children:
-                swarm_manager:
+                swarm_managers:
                 swarm_workers:
                 

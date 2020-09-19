@@ -18,10 +18,6 @@ data "aws_ami" "ubuntu" {
     owners = ["099720109477"] # Canonical
 }
 
-locals {
-  vpc_id = var.vpc_id == "" ? data.aws_vpc.default.id : var.vpc_id
-}
-
 resource "aws_instance" "zookeeper_nodes" {
     ami = data.aws_ami.ubuntu.id
     instance_type = var.zookeeper_instance_type

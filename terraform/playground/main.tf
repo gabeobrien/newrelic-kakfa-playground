@@ -11,6 +11,14 @@ provider "aws" {
   region  = var.aws_region
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
+locals {
+  vpc_id = var.vpc_id == "" ? data.aws_vpc.default.id : var.vpc_id
+}
+
 module "kafka_cluster" {
     source = "../modules/kafka-cluster"
     project_name = var.project_name

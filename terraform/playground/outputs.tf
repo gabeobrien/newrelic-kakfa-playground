@@ -19,6 +19,8 @@ resource "local_file" "ansible_hosts" {
             zookeeper_nodes = module.kafka_cluster.zookeeper_nodes
             kafka_brokers = module.kafka_cluster.kafka_brokers
             swarm_nodes = module.application_stack.swarm_nodes
+            swarm_managers = module.application_stack.swarm_managers
+            swarm_workers = module.application_stack.swarm_workers
             project_name = var.project_name
         }
     )
