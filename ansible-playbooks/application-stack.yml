@@ -52,4 +52,16 @@
     - name: Join swarm as worker
       command: "docker swarm join --token {{ hostvars[groups['swarm_managers'][0]]['worker_token']['stdout'] }} {{ hostvars[groups['swarm_managers'][0]]['private_ip'] }}"
       when: swarm_status.stdout != 'active'
-      
+
+- hosts: swarm_managers[0]
+  become: yes
+  tags:
+    - registry
+  tasks:
+    - name: Get registry status
+      shell: "docker service inspect registry"
+      ignore_errors: true
+      register: registry_status
+    - name: Create registry service
+      command: "docker service create --name registry --publish published=5000,target=5000 registry:2"
+      when: registry_status.rc == 1
