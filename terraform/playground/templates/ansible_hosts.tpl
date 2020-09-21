@@ -2,6 +2,9 @@ all:
     vars:
         project_name: ${project_name}
         new_relic_license_key: ${new_relic_license_key}
+    hosts:
+        build_node:
+            ansible_host: ${swarm_managers[0].public_ip}
     children:
         zookeepernodes:
             hosts:

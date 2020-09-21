@@ -65,3 +65,31 @@
     - name: Create registry service
       command: "docker service create --name registry --publish published=5000,target=5000 registry:2"
       when: registry_status.rc == 1
+  
+- hosts: build_node
+  become: yes
+  tags:
+    - deploy
+  tasks:
+    - name: Synchronize application sources
+      synchronize:
+        src: ../applications
+        dest: /tmp/build/
+    - name: Create overlay compose file
+      template:
+        dest: "/tmp/build/applications/docker-compose.override.yml"
+        src: ./files/templates/docker-compose.override.j2
+        mode: 0755
+    - name: Build the stack
+      command:
+        chdir: /tmp/build/applications
+        cmd: docker-compose build
+    - name: Push images to the registry
+      command:
+        chdir: /tmp/build/applications
+        cmd: docker-compose push
+    - name: Deploy the stack
+      command:
+        chdir: /tmp/build/applications
+        cmd: docker stack deploy -c ./docker-compose.yml -c ./docker-compose.override.yml newrelic-kafka-playground-apps
+    

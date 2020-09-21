@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+version: '3.4'
+
+services:
+  producer:
+    image: localhost:5000/producer
+    environment:
+      NEW_RELIC_LICENSE_KEY: {{ new_relic_license_key }}
+    deploy:
+      replicas: {{ 2 + groups['kafkabrokers'] | length  }}

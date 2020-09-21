@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  producer:
+    build: ./producer
+    image: producer
+    ports:
+      - "8080:8081"
+        
