@@ -13,6 +13,9 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
+
 @WebListener
 public class ConfigListener implements ServletContextListener {
     
@@ -51,6 +54,10 @@ public class ConfigListener implements ServletContextListener {
         event.getServletContext().setAttribute("kafkaProducer", producer);
         
         logger.info("added kafkaProducer to ServletContext");
+        
+        // print logback internal state
+        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+        StatusPrinter.print(lc);
     }
     public void contextDestroyed(ServletContextEvent event) {
     }

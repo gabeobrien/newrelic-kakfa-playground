@@ -5,11 +5,13 @@ RUN unzip newrelic-java.zip
 
 FROM gradle:jdk11 as dependencies
 ENV GRADLE_USER_HOME /cache
+COPY --from=newrelic /tmp/newrelic/newrelic-api.jar newrelic-api.jar
 COPY build.gradle settings.gradle ./
 RUN gradle --no-daemon dependencies --stacktrace
 
 FROM gradle:jdk11 as build
 COPY --from=dependencies /cache /home/gradle/.gradle
+COPY --from=newrelic /tmp/newrelic/newrelic-api.jar newrelic-api.jar
 COPY build.gradle settings.gradle ./
 COPY src/ src/
 RUN gradle --no-daemon war
