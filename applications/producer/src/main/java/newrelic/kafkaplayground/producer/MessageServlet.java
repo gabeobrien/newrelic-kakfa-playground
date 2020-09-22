@@ -64,15 +64,18 @@ public class MessageServlet extends HttpServlet {
                     } else {
                         // annotate the span with the metadta
                         if (metadata.hasOffset()) {
-                            NewRelic.addCustomParameter("kafka.record.offset", metadata.offset());
+                            //NewRelic.addCustomParameter("kafka.record.offset", metadata.offset());
+                            NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.record.offset", metadata.offset()); 
                         }
-                        NewRelic.addCustomParameter("kafka.record.partition", metadata.partition());
-                        NewRelic.addCustomParameter("kafka.record.topic", metadata.topic());
+                        //NewRelic.addCustomParameter("kafka.record.partition", metadata.partition());
+                        NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.record.partition", metadata.partition());
+                        //NewRelic.addCustomParameter("kafka.record.topic", metadata.topic());
+                        NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.record.topic", metadata.topic());
                         
                         // only log if the trace is sampled to demonstrate logs-in-context
-                        //if (NewRelic.getAgent().getTraceMetadata().isSampled()) {
+                        if (NewRelic.getAgent().getTraceMetadata().isSampled()) {
                             logger.info("Sent message {}", payload);
-                        //}
+                        }
                     }
                 }
             });
