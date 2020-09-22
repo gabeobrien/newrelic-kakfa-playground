@@ -65,7 +65,15 @@
     - name: Create registry service
       command: "docker service create --name registry --publish published=5000,target=5000 registry:2"
       when: registry_status.rc == 1
-  
+      
+- hosts: kafkabrokers[0]
+  become: yes
+  tags:
+    - create_topic
+  tasks:
+    - name: Create Kafka Topic
+      command: "/opt/kafka/bin/kafka-topics.sh --create --topic application-messages --bootstrap-server localhost:9092"
+      
 - hosts: build_node
   become: yes
   tags:

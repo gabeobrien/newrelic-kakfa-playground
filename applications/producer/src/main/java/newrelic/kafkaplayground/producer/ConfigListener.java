@@ -53,6 +53,5 @@ public class ConfigListener implements ServletContextListener {
         logger.info("added kafkaProducer to ServletContext");
     }
     public void contextDestroyed(ServletContextEvent event) {
-        // Do your thing during webapp's shutdown.
     }
 }

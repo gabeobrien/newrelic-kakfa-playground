@@ -5,5 +5,5 @@ services:
     build: ./producer
     image: producer
     ports:
-      - "8080:8081"
+      - "8081:8080"
         
