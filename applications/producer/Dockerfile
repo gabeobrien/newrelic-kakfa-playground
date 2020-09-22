@@ -17,6 +17,7 @@ RUN gradle --no-daemon war
 FROM jetty:9.4.31-jre11-slim
 COPY --from=build /home/gradle/build/libs/newrelic-kafka-playground-producer.war /var/lib/jetty/webapps/ROOT.war
 COPY --from=newrelic /tmp/newrelic /run/jetty/newrelic
+COPY ./config /var/webapp/config
 ENV NEW_RELIC_APP_NAME="newrelic-kafka-playground-producer"
 ENV NEW_RELIC_LOG_FILE_NAME=STDOUT
 CMD ["java", "-jar", "/usr/local/jetty/start.jar", "-javaagent:/run/jetty/newrelic/newrelic.jar"]

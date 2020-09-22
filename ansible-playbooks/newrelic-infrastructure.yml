@@ -60,3 +60,9 @@
           custom_attributes:
             project: "{{ project_name }}"
             role: "swarm_node"
+  tasks:
+    - name: Copy docker logging config
+      copy:
+        src: ./files/swarm_logs.yml
+        dest: /etc/newrelic-infra/logging.d/swarm_logs.yml
+        mode: 0666
