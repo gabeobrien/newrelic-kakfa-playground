@@ -2,11 +2,15 @@ version: '3.4'
 
 services:
   producer:
-    build: ./producer
+    build:
+      context: .
+      dockerfile: ./producer/Dockerfile
     image: producer
     ports:
       - "8081:8080"
         
   consumer:
-    build: ./consumer
+    build:
+      context: .
+      dockerfile: ./consumer/Dockerfile
     image: consumer

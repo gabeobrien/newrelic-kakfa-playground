@@ -6,6 +6,8 @@ repositories {
     jcenter()
 }
 
+sourceSets.main.java.srcDirs += file('../common/src/main/java')
+
 // compileJava.options.compilerArgs.add '-Xlint:unchecked'
 
 dependencies {
@@ -19,3 +21,10 @@ dependencies {
 }
 
 mainClassName = 'newrelic.kafkaplayground.consumer.MessageConsumer'
+
+sourceSets.each {
+    println(it)
+    it.allSource.each {
+        println(it)
+    }
+}

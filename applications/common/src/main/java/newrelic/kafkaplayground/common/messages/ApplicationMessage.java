@@ -1,4 +1,4 @@
-package newrelic.kafkaplayground.messages;
+package newrelic.kafkaplayground.common.messages;
 
 public class ApplicationMessage {
     

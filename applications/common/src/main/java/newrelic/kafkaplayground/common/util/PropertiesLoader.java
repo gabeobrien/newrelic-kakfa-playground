@@ -1,4 +1,4 @@
-package newrelic.kafkaplayground.consumer;
+package newrelic.kafkaplayground.common.util;
 
 import java.util.Properties;
 import java.util.List;
