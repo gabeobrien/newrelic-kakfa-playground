@@ -93,6 +93,11 @@
         dest: "/tmp/build/applications/producer.override.properties"
         src: ./files/templates/producer.override.properties.j2
         mode: 0755
+    - name: Create override application consumer properties
+      template:
+        dest: "/tmp/build/applications/application.consumer.override.properties"
+        src: ./files/templates/application.consumer.override.properties.j2
+        mode: 0755
     - name: Build the stack
       command:
         chdir: /tmp/build/applications

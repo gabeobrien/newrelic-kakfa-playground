@@ -2,6 +2,7 @@ package newrelic.kafkaplayground.producer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +18,7 @@ import org.apache.kafka.clients.producer.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.newrelic.api.agent.DistributedTracePayload;
 import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import com.newrelic.api.agent.Token;
@@ -52,6 +54,9 @@ public class MessageServlet extends HttpServlet {
         String payload = String.format("{ \"userId\": %s, \"messageId\": %s}", userId, messageId);
         
         ProducerRecord<String, String> record = new ProducerRecord<String, String>(topicName, userId, payload);
+        
+        final DistributedTracePayload dtPayload = NewRelic.getAgent().getTransaction().createDistributedTracePayload();
+        record.headers().add("newrelic", dtPayload.text().getBytes(StandardCharsets.UTF_8));
         
         
         producer.send(record,

@@ -16,8 +16,12 @@ COPY build.gradle settings.gradle ./
 COPY src/ src/
 RUN gradle --no-daemon build
 
-# FROM openjdk:11-slim
-# COPY --from=build /home/gradle/build/libs/newrelic-kafka-playground-producer.war /var/lib/jetty/webapps/ROOT.war
-# COPY --from=newrelic /tmp/newrelic /run/jetty/newrelic
-# COPY ./config /var/webapp/config
-# CMD ["java", "-jar", "/usr/local/jetty/start.jar", "-javaagent:/run/jetty/newrelic/newrelic.jar"]
+FROM openjdk:11-slim
+RUN mkdir /usr/local/app
+COPY --from=build /home/gradle/build/distributions/newrelic-kafka-playground-consumer.tar /tmp/newrelic-kafka-playground-consumer.tar
+RUN tar -xf /tmp/newrelic-kafka-playground-consumer.tar -C /usr/local/app
+COPY ./config /usr/local/app/config
+COPY --from=newrelic /tmp/newrelic /var/newrelic
+WORKDIR /usr/local/app/newrelic-kafka-playground-consumer
+ENV JAVA_OPTS="-javaagent:/var/newrelic/newrelic.jar"
+CMD ["./bin/newrelic-kafka-playground-consumer"]

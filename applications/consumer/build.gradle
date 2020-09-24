@@ -18,4 +18,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-mainClassName = 'newrelic.kafka.playground.MessageConsumer'
+mainClassName = 'newrelic.kafkaplayground.consumer.MessageConsumer'

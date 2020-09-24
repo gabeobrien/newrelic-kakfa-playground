@@ -12,21 +12,29 @@ import org.apache.kafka.common.header.Header;
 import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ApplicationMessagesLoop implements Runnable {
+    
+  final static Logger logger = LoggerFactory.getLogger(ApplicationMessagesLoop.class);
   
   private final KafkaConsumer<String, String> consumer;
   private final List<String> topics;
   private final String id;
   
   @Trace(dispatcher = true)
-  private static void processMessage(ConsumerRecord<String, String> rec){
-    Iterable<Header> headers = rec.headers().headers("newrelic");
+  private void processMessage(ConsumerRecord<String, String> record){
+    Iterable<Header> headers = record.headers().headers("newrelic");
     for(Header header: headers) {
-      NewRelic.getAgent().getTransaction().acceptDistributedTracePayload(new String(header.value(), StandardCharsets.UTF_8));
+      String nrpayload = new String(header.value(), StandardCharsets.UTF_8);
+      NewRelic.getAgent().getTransaction().acceptDistributedTracePayload(nrpayload);
     }
+    //follow kafka's format:
+    logger.info("[Consumer clientId={}, groupId={}] consumed message: {}", this.consumer.groupMetadata().memberId(), this.consumer.groupMetadata().groupId(), record.value());
   }
 
-  public ApplicationMessagesLoop(String id, String groupId, List<String> topics, Properties consumerProperites) {
+  public ApplicationMessagesLoop(String id, List<String> topics, Properties consumerProperites) {
     this.id = id;
     this.topics = topics;
     this.consumer = new KafkaConsumer<>(consumerProperites);
@@ -35,12 +43,13 @@ public class ApplicationMessagesLoop implements Runnable {
   @Override
   public void run() {
     try {
-      consumer.subscribe(topics);
+      NotifyOnRebalance nor = new NotifyOnRebalance();
+      consumer.subscribe(topics, nor);
 
       while (true) {
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(Long.MAX_VALUE));
         for (ConsumerRecord<String, String> record : records) {
-
+            processMessage(record);
         }
       }
     } catch (WakeupException e) {
