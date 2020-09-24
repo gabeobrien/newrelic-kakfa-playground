@@ -1,0 +1,21 @@
+plugins {
+    id 'application'  
+}
+
+repositories {
+    jcenter()
+}
+
+// compileJava.options.compilerArgs.add '-Xlint:unchecked'
+
+dependencies {
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '2.6.0'
+    // implementation 'com.google.code.gson:gson:2.8.6'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    implementation group: 'com.newrelic.logging', name: 'logback', version: '2.0'
+    compileOnly files('newrelic-api.jar')
+    testImplementation 'junit:junit:4.12'
+}
+
+mainClassName = 'newrelic.kafka.playground.MessageConsumer'
