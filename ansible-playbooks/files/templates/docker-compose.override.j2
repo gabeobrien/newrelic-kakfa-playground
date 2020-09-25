@@ -45,3 +45,7 @@ services:
         max-file: 10
     deploy:
       replicas: {{ groups['kafkabrokers'] | length  }}
+  
+  loadgen:
+    image: localhost:5000/loadgen
+    command:  "-f locustfile.py --headless -u 1000 -H http://producer:8081"

@@ -23,9 +23,7 @@ public class MessageConsumer {
       
       Properties props = PropertiesLoader.loadProperties(Arrays.asList("/usr/local/app/config/application.consumer.default.properties", "/usr/local/app/config/application.consumer.override.properties"));
       
-      props.put("client.id",  props.put("client.id", System.getenv("HOSTNAME")););
-      
-      String envProps = System.getenv("APPLICATION_CONSUMER_PROPS");
+      String envProps = System.getenv("APPLICATION_CONSUMER_PROPERTIES");
       if(envProps != null) {
         try {
           props.load(new StringReader(envProps));
@@ -34,8 +32,12 @@ public class MessageConsumer {
         }
       }
       
+      if (props.getProperty("client.id") == null) {
+        props.setProperty("client.id", "producer-" + System.getenv("HOSTNAME"));
+      }
+      
       String applicationMessagesTopic = System.getenv("APPLICATION_MESSAGES_TOPIC_NAME");
-      ApplicationMessagesLoop aml = new ApplicationMessagesLoop(consumerId, Arrays.asList(applicationMessagesTopic), props);
+      ApplicationMessagesLoop aml = new ApplicationMessagesLoop(Arrays.asList(applicationMessagesTopic), props);
       executor.submit(aml);
     
       Runtime.getRuntime().addShutdownHook(new Thread() {

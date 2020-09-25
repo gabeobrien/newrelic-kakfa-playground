@@ -21,7 +21,6 @@ public class ApplicationMessagesLoop implements Runnable {
   
   private final KafkaConsumer<String, String> consumer;
   private final List<String> topics;
-  private final String id;
   
   @Trace(dispatcher = true)
   private void processMessage(ConsumerRecord<String, String> record){
@@ -30,12 +29,14 @@ public class ApplicationMessagesLoop implements Runnable {
       String nrpayload = new String(header.value(), StandardCharsets.UTF_8);
       NewRelic.getAgent().getTransaction().acceptDistributedTracePayload(nrpayload);
     }
-    //follow kafka's format:
-    logger.info("[Consumer clientId={}, groupId={}] consumed message: {}", this.consumer.groupMetadata().memberId(), this.consumer.groupMetadata().groupId(), record.value());
+    // only log if the trace is sampled to demonstrate logs-in-context
+    if (NewRelic.getAgent().getTraceMetadata().isSampled()) {
+      logger.info("[Consumer clientId={}, groupId={}] consumed message: {}", this.consumer.groupMetadata().memberId(), this.consumer.groupMetadata().groupId(), record.value());
+    }
+      
   }
 
-  public ApplicationMessagesLoop(String id, List<String> topics, Properties consumerProperites) {
-    this.id = id;
+  public ApplicationMessagesLoop(List<String> topics, Properties consumerProperites) {
     this.topics = topics;
     this.consumer = new KafkaConsumer<>(consumerProperites);
   }

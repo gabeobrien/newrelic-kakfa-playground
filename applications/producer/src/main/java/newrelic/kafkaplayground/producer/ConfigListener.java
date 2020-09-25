@@ -36,9 +36,10 @@ public class ConfigListener implements ServletContextListener {
               logger.error("Unable to load environment properties", e);
             }
           }
-        
-        String clientId = System.getenv("CLIENT_ID") != null ? System.getenv("CLIENT_ID") : "producer-" +System.getenv("HOSTNAME");
-        producerProps.setProperty("client.id", clientId);
+          
+        if (producerProps.getProperty("client.id") == null) {
+             producerProps.setProperty("client.id", "producer-" + System.getenv("HOSTNAME"));
+        }
         
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
         
