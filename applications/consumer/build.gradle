@@ -21,10 +21,3 @@ dependencies {
 }
 
 mainClassName = 'newrelic.kafkaplayground.consumer.MessageConsumer'
-
-sourceSets.each {
-    println(it)
-    it.allSource.each {
-        println(it)
-    }
-}

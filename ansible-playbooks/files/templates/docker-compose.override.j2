@@ -17,10 +17,10 @@ services:
       NEW_RELIC_APP_NAME: "newrelic-kafka-playground-producer"
       NEW_RELIC_LOG_FILE_NAME: "STDOUT"
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED: "true"
-      KAFKA_TOPIC_NAME: "application-messages"
+      APPLICATION_MESSAGES_TOPIC_NAME: "application-messages"
     configs:
       - source: producer_properties
-        target: /var/webapp/config/producer.override.properties
+        target: /var/webapp/config/application.producer.override.properties
     logging:
       options:
         max-size: 10m

@@ -21,11 +21,10 @@ public class MessageConsumer {
       //TODO:  add additional thread pools for background/status messaging.
       ExecutorService executor = Executors.newFixedThreadPool(1);
       
-      String consumerId = System.getenv("CONSUMER_ID") != null ? System.getenv("CONSUMER_ID") : System.getenv("HOSTNAME");
-      
-      String applicationMessagesTopic = System.getenv("APPLICATION_MESSAGES_TOPIC_NAME");
-      
       Properties props = PropertiesLoader.loadProperties(Arrays.asList("/usr/local/app/config/application.consumer.default.properties", "/usr/local/app/config/application.consumer.override.properties"));
+      
+      props.put("client.id",  props.put("client.id", System.getenv("HOSTNAME")););
+      
       String envProps = System.getenv("APPLICATION_CONSUMER_PROPS");
       if(envProps != null) {
         try {
@@ -35,6 +34,7 @@ public class MessageConsumer {
         }
       }
       
+      String applicationMessagesTopic = System.getenv("APPLICATION_MESSAGES_TOPIC_NAME");
       ApplicationMessagesLoop aml = new ApplicationMessagesLoop(consumerId, Arrays.asList(applicationMessagesTopic), props);
       executor.submit(aml);
     

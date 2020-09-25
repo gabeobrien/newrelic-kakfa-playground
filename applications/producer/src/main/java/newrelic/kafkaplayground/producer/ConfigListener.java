@@ -4,9 +4,13 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 import java.util.Properties;
+import java.util.Arrays;
+import java.io.StringReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import newrelic.kafkaplayground.common.util.PropertiesLoader;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 
@@ -21,36 +25,24 @@ public class ConfigListener implements ServletContextListener {
     
     final Logger logger = LoggerFactory.getLogger(ConfigListener.class);
     
-    final String defaultPropsPath = "/var/webapp/config/producer.default.properties";
-    final String overridePropsPath = "/var/webapp/config/producer.override.properties";
-    
     public void contextInitialized(ServletContextEvent event) {
-            Properties producerProperties = new Properties();
-        try{
-            FileInputStream defaultProps = new FileInputStream(defaultPropsPath); 
-            producerProperties.load(defaultProps);
-            defaultProps.close();
-            logger.info("loaded default props");
-        } catch (FileNotFoundException notFound) {
-            logger.error(String.format("Unable to find %s, using default configuration", defaultPropsPath));
-        } catch (IOException ioe) {
-            logger.warn(ioe.getMessage());
-        }
-        try {
-            FileInputStream overrideProps = new FileInputStream(overridePropsPath);
-            producerProperties.load(overrideProps);
-            overrideProps.close();
-            logger.info("loaded override props");
-        } catch (FileNotFoundException notFound) {
-            logger.warn(String.format("Unable to find %s, using default configuration", overridePropsPath));
-        } catch (IOException ioe) {
-            logger.warn(ioe.getMessage());
-        }
+    
+        Properties applicationProducerProps = PropertiesLoader.loadProperties(Arrays.asList("/var/webapp/config/application.producer.default.properties", "/var/webapp/config/application.producer.override.properties"));
+        String envProps = System.getenv("APPLICATION_PRODUCER_PROPS");
+        if(envProps != null) {
+            try {
+              applicationProducerProps.load(new StringReader(envProps));
+            } catch (Exception e) {
+              logger.error("Unable to load environment properties", e);
+            }
+          }
         
-        logger.info(String.format("Using producer configuration:\n%s", producerProperties.toString()));
+        String clientId = System.getenv("CLIENT_ID") != null ? System.getenv("CLIENT_ID") : "producer-" +System.getenv("HOSTNAME");
+        applicationProducerProps.setProperty("client.id", clientId);
         
-        KafkaProducer<String, String> producer = new KafkaProducer<>(producerProperties);
+        KafkaProducer<String, String> producer = new KafkaProducer<>(applicationProducerProps);
         
+        event.getServletContext().setAttribute("applicationProducerProps", applicationProducerProps);
         event.getServletContext().setAttribute("kafkaProducer", producer);
         
         logger.info("added kafkaProducer to ServletContext");
@@ -59,6 +51,7 @@ public class ConfigListener implements ServletContextListener {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         StatusPrinter.print(lc);
     }
+    
     public void contextDestroyed(ServletContextEvent event) {
     }
 }

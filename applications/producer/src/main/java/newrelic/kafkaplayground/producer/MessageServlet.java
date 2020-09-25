@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.Properties;
 import javax.servlet.ServletException;
+import javax.servlet.ServletConfig;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,63 +26,67 @@ import com.newrelic.api.agent.NewRelic;
 import com.newrelic.api.agent.Trace;
 import com.newrelic.api.agent.Token;
 
-@WebServlet(name = "MessageServlet", urlPatterns = {"/message"}, loadOnStartup = 1) 
+@WebServlet(name = "MessageServlet", urlPatterns = {"/sendmessage"}, loadOnStartup = 1, initParams={
+@WebInitParam(name="applicationTopicName", value="application-messages")}) 
 public class MessageServlet extends HttpServlet {
     
     final Logger logger = LoggerFactory.getLogger(MessageServlet.class);
     
-    static String topicName;
+    private String applicationTopicName;
     
-    static {
-        topicName = System.getenv("KAFKA_TOPIC_NAME");
-        if (topicName == null) {
-            throw new RuntimeException("Kakfa topic name was null");
+    @Override
+    public void init(ServletConfig ctx) throws ServletException {
+        
+        String applicationTopicNameEnv = System.getenv("APPLICATION_MESSAGES_TOPIC_NAME");
+        if (applicationTopicNameEnv != null) {
+            this.applicationTopicName = applicationTopicNameEnv;
+        } else {
+            this.applicationTopicName = ctx.getInitParameter("applicationTopicName");
         }
+        
     }
     
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-            
-        Token transactionToken = NewRelic.getAgent().getTransaction().getToken();
         
+        Properties applicationProducerProps = (Properties) request.getServletContext().getAttribute("applicationProducerProps");
         @SuppressWarnings("unchecked")
         KafkaProducer<String, String> producer = (KafkaProducer) request.getServletContext().getAttribute("kafkaProducer");
+            
+        Token transactionToken = NewRelic.getAgent().getTransaction().getToken();
     
         String userId = (String) request.getAttribute("userId");
-        
         NewRelic.addCustomParameter("user.id", userId);
         
         String messageId = UUID.randomUUID().toString();
+        NewRelic.addCustomParameter("message.id", messageId);
         
         String payload = String.format("{ \"userId\": %s, \"messageId\": %s}", userId, messageId);
-        
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(topicName, userId, payload);
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>(this.applicationTopicName, userId, payload);
         
         final DistributedTracePayload dtPayload = NewRelic.getAgent().getTransaction().createDistributedTracePayload();
         record.headers().add("newrelic", dtPayload.text().getBytes(StandardCharsets.UTF_8));
-        
         
         producer.send(record,
             new Callback() {
                 @Trace(async = true)
                 public void onCompletion(RecordMetadata metadata, Exception e) {
                     transactionToken.link();
+                    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.producer.config.client.id", applicationProducerProps.getProperty("client.id"));
                     if(e != null) {
                         logger.error("Got an error (asynchronously) when sending message {}", messageId, e);
                     } else {
                         // annotate the span with the metadta
                         if (metadata.hasOffset()) {
-                            //NewRelic.addCustomParameter("kafka.record.offset", metadata.offset());
-                            NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.record.offset", metadata.offset()); 
+                            NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.producer.record.offset", metadata.offset()); 
                         }
-                        //NewRelic.addCustomParameter("kafka.record.partition", metadata.partition());
-                        NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.record.partition", metadata.partition());
-                        //NewRelic.addCustomParameter("kafka.record.topic", metadata.topic());
-                        NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.record.topic", metadata.topic());
+                        NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.producer.record.partition", metadata.partition());
+                        NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.producer.record.topic", metadata.topic());
                         
                         // only log if the trace is sampled to demonstrate logs-in-context
                         if (NewRelic.getAgent().getTraceMetadata().isSampled()) {
-                            logger.info("Sent message {}", payload);
+                            logger.info("[Producer clientId={}] Sent message {}", applicationProducerProps.getProperty("client.id"), payload);
                         }
                     }
                 }
