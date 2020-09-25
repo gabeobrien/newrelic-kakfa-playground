@@ -90,8 +90,8 @@
         mode: 0755
     - name: Create override producer properties
       template:
-        dest: "/tmp/build/applications/application.producer.override.properties"
-        src: ./files/templates/application.producer.override.properties.j2
+        dest: "/tmp/build/applications/producer.override.properties"
+        src: ./files/templates/producer.override.properties.j2
         mode: 0755
     - name: Create override application consumer properties
       template:

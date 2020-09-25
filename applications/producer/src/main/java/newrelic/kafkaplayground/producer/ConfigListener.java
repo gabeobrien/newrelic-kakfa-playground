@@ -27,22 +27,22 @@ public class ConfigListener implements ServletContextListener {
     
     public void contextInitialized(ServletContextEvent event) {
     
-        Properties applicationProducerProps = PropertiesLoader.loadProperties(Arrays.asList("/var/webapp/config/application.producer.default.properties", "/var/webapp/config/application.producer.override.properties"));
-        String envProps = System.getenv("APPLICATION_PRODUCER_PROPS");
+        Properties producerProps = PropertiesLoader.loadProperties(Arrays.asList("/var/webapp/config/producer.default.properties", "/var/webapp/config/producer.override.properties"));
+        String envProps = System.getenv("PRODUCER_PROPERTIES");
         if(envProps != null) {
             try {
-              applicationProducerProps.load(new StringReader(envProps));
+              producerProps.load(new StringReader(envProps));
             } catch (Exception e) {
               logger.error("Unable to load environment properties", e);
             }
           }
         
         String clientId = System.getenv("CLIENT_ID") != null ? System.getenv("CLIENT_ID") : "producer-" +System.getenv("HOSTNAME");
-        applicationProducerProps.setProperty("client.id", clientId);
+        producerProps.setProperty("client.id", clientId);
         
-        KafkaProducer<String, String> producer = new KafkaProducer<>(applicationProducerProps);
+        KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
         
-        event.getServletContext().setAttribute("applicationProducerProps", applicationProducerProps);
+        event.getServletContext().setAttribute("producerProps", producerProps);
         event.getServletContext().setAttribute("kafkaProducer", producer);
         
         logger.info("added kafkaProducer to ServletContext");

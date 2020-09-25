@@ -50,7 +50,7 @@ public class MessageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         
-        Properties applicationProducerProps = (Properties) request.getServletContext().getAttribute("applicationProducerProps");
+        Properties producerProps = (Properties) request.getServletContext().getAttribute("producerProps");
         @SuppressWarnings("unchecked")
         KafkaProducer<String, String> producer = (KafkaProducer) request.getServletContext().getAttribute("kafkaProducer");
             
@@ -73,7 +73,7 @@ public class MessageServlet extends HttpServlet {
                 @Trace(async = true)
                 public void onCompletion(RecordMetadata metadata, Exception e) {
                     transactionToken.link();
-                    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.producer.config.client.id", applicationProducerProps.getProperty("client.id"));
+                    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.producer.config.client.id", producerProps.getProperty("client.id"));
                     if(e != null) {
                         logger.error("Got an error (asynchronously) when sending message {}", messageId, e);
                     } else {
@@ -86,7 +86,7 @@ public class MessageServlet extends HttpServlet {
                         
                         // only log if the trace is sampled to demonstrate logs-in-context
                         if (NewRelic.getAgent().getTraceMetadata().isSampled()) {
-                            logger.info("[Producer clientId={}] Sent message {}", applicationProducerProps.getProperty("client.id"), payload);
+                            logger.info("[Producer clientId={}] Sent message {}", producerProps.getProperty("client.id"), payload);
                         }
                     }
                 }
