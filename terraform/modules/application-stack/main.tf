@@ -32,5 +32,6 @@ resource "aws_instance" "swarm_nodes" {
       Role = "swarm"
       swarm_manager = count.index == 0 ? "true" : "false"
       Project = var.project_name
+      DisplayName = "swarm-${count.index}"
     }
 }

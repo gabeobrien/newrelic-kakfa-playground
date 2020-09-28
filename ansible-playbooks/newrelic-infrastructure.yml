@@ -12,9 +12,10 @@
           log_file: /var/log/nr-infra.log
           log_to_stdout: false
           log_format: json
+          display_name: "{{ display_name }}"
           custom_attributes:
             project: "{{ project_name }}"
-            role: "zookeeper_node"
+            role: "{{ role }}"
             zookeeper_my_id: "{{ my_id }}"
     - name: logging
       vars:
@@ -35,9 +36,10 @@
           log_file: /var/log/nr-infra.log
           log_to_stdout: false
           log_format: json
+          display_name: "{{ display_name }}"
           custom_attributes:
             project: "{{ project_name }}"
-            role: "kafka_broker"
+            role: "{{ role }}"
             kafka_broker_id: "{{ broker_id }}"
     - name: logging
       vars:
@@ -57,9 +59,10 @@
           log_file: /var/log/nr-infra.log
           log_to_stdout: false
           log_format: json
+          display_name: "{{ display_name }}"
           custom_attributes:
             project: "{{ project_name }}"
-            role: "swarm_node"
+            role: "{{ role }}"
   tasks:
     - name: Copy docker logging config
       copy:

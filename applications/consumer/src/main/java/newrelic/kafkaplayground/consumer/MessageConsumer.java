@@ -33,7 +33,7 @@ public class MessageConsumer {
       }
       
       if (props.getProperty("client.id") == null) {
-        props.setProperty("client.id", "producer-" + System.getenv("HOSTNAME"));
+        props.setProperty("client.id", "consumer-" + System.getenv("HOSTNAME"));
       }
       
       String applicationMessagesTopic = System.getenv("APPLICATION_MESSAGES_TOPIC_NAME");

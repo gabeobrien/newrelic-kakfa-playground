@@ -28,10 +28,11 @@ resource "aws_instance" "zookeeper_nodes" {
     count = var.zookeeper_num_nodes
     
     tags = {
-      Name = "newrelic-kafka-playground-zookeeper-${count.index}"
+      Name = "${var.project_name}-zookeeper-${count.index}"
       Role = "zookeeper-node"
       my_id = "${count.index}"
       Project = var.project_name
+      DisplayName = "zookeeper-node-${count.index}"
     }
 }
 
@@ -45,9 +46,10 @@ resource "aws_instance" "kafka_brokers" {
     count = var.kafka_num_brokers
     
     tags = {
-      Name = "newrelic-kafka-playground-broker-${count.index}"
+      Name = "${var.project_name}-broker-${count.index}"
       Role = "kafka-broker"
       broker_id = "${count.index}"
       Project = var.project_name
+      DisplayName = "kafka-broker-${count.index}"
     }
 }

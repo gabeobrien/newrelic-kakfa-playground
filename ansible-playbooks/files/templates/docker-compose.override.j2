@@ -17,6 +17,7 @@ services:
       NEW_RELIC_APP_NAME: "newrelic-kafka-playground-producer"
       NEW_RELIC_LOG_FILE_NAME: "STDOUT"
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED: "true"
+      NEW_RELIC_KAFKA_METRICS_AS_EVENTS_ENABLED: "true"
       APPLICATION_MESSAGES_TOPIC_NAME: "application-messages"
     configs:
       - source: producer_properties
@@ -35,6 +36,7 @@ services:
       NEW_RELIC_APP_NAME: "newrelic-kafka-playground-consumer"
       NEW_RELIC_LOG_FILE_NAME: "STDOUT"
       NEW_RELIC_DISTRIBUTED_TRACING_ENABLED: "true"
+      NEW_RELIC_KAFKA_METRICS_AS_EVENTS_ENABLED: "true"
       APPLICATION_MESSAGES_TOPIC_NAME: "application-messages"
     configs:
       - source: consumer_properties
