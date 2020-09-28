@@ -1,11 +1,12 @@
 ---
 
-- name: Install Docker on All Swarm nodes
+- name: Install Docker and Chrony on All Swarm nodes
   become: yes
   hosts: swarm_nodes
   tags:
     - provision
   roles:
+    - name: chrony
     - name: docker
 
 - hosts: swarm_managers[0]

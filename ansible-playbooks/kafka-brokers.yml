@@ -3,6 +3,7 @@
   hosts: kafkabrokers
   become: yes
   roles:
+    - name: chrony
     - name: kafka-broker
       vars:
         kafka_advertised_listeners:

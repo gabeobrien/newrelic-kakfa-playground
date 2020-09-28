@@ -3,4 +3,5 @@
   hosts: zookeepernodes
   become: yes
   roles:
+    - name: chrony
     - name: zookeeper-node
