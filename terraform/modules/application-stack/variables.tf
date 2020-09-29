@@ -1,33 +1,33 @@
 variable "aws_region" {
-    type = string
+  type = string
 }
 
 variable "project_name" {
-    type = string
+  type = string
 }
 
 variable "new_relic_license_key" {
-    type = string
+  type = string
 }
 
 variable "vpc_id" {
-    type = string
-    default = ""
+  type    = string
+  default = ""
 }
 
 variable "security_group_ids" {
-    type = list(string)
+  type = list(string)
 }
 
 variable "instance_type" {
-    type = string
+  type = string
 }
 
 variable "num_nodes" {
-    type = number
+  type = number
 }
 
 variable "key_name" {
-    type = string
-    description = "The name of the key pair to associate with the EC2 instances"
+  type        = string
+  description = "The name of the key pair to associate with the EC2 instances"
 }
