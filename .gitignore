@@ -4,3 +4,5 @@ terraform.tfstate*
 terraform/**/output/*
 ansible.log
 tmpinventory
+tmp
+s3.backend.tf

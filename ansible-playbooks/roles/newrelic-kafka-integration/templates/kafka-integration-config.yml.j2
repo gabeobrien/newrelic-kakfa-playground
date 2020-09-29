@@ -27,7 +27,7 @@ instances:
 
     # Additionally, custom labels can be added to further identify your data
     labels:
-      role: kafka
+      usecase: kafka
 
   # This instance gives an example of collecting inventory with the integration
   - name: kafka-inventory
@@ -36,6 +36,8 @@ instances:
       cluster_name: "{{ newrelic_kafka_integration_cluster_name }}"
       zookeeper_hosts: '[{"host": "{{ newrelic_kafka_integration_zookeeper_host }}", "port": {{ newrelic_kafka_integration_zookeeper_client_port }} }]'
       topic_mode: 'all'
+    labels:
+      usecase: kafka
 
   # Example configuration for collecting consumer offsets for the cluster
   - name: kafka-consumer-offsets
@@ -47,3 +49,5 @@ instances:
 
       # A regex pattern that matches the consumer groups to collect metrics from
       consumer_group_regex: '.*'
+    labels:
+      usecase: kafka

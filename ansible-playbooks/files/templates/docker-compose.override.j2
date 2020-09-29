@@ -58,4 +58,4 @@ services:
         max-file: 10
     deploy:
       replicas: 1
-    command:  "-f locustfile.py --headless -u 1000 -r 10 --loglevel ERROR -H http://producer:8080"
+    command:  "-f locustfile.py --headless -u 500 -r 10 --loglevel ERROR -H http://producer:8080"
