@@ -29,9 +29,16 @@ public class ApplicationMessagesLoop implements Runnable {
       String nrpayload = new String(header.value(), StandardCharsets.UTF_8);
       NewRelic.getAgent().getTransaction().acceptDistributedTracePayload(nrpayload);
     }
+    
+    // annotate this span with metadata from the record
+    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.consumer.record.topic", record.topic());
+    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.consumer.record.partition", record.partition());
+    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.consumer.record.offset", record.offset());
+    NewRelic.getAgent().getTracedMethod().addCustomAttribute("kafka.consumer.record.timestamp", record.timestamp());
+    
     // only log if the trace is sampled to demonstrate logs-in-context
     if (NewRelic.getAgent().getTraceMetadata().isSampled()) {
-      logger.info("[Consumer clientId={}, groupId={}] consumed message: {}", this.consumer.groupMetadata().memberId(), this.consumer.groupMetadata().groupId(), record.value());
+      logger.info("[Consumer memberId={}, groupId={}] consumed message: {}", this.consumer.groupMetadata().memberId(), this.consumer.groupMetadata().groupId(), record.value());
     }
       
   }
