@@ -16,37 +16,37 @@ import java.util.Properties;
 
 @WebListener
 public class ConfigListener implements ServletContextListener {
-    
+
     final Logger logger = LoggerFactory.getLogger(ConfigListener.class);
-    
+
     public void contextInitialized(ServletContextEvent event) {
-    
+
         Properties producerProps = PropertiesLoader.loadProperties(Arrays.asList("/var/webapp/config/producer.default.properties", "/var/webapp/config/producer.override.properties"));
         String envProps = System.getenv("PRODUCER_PROPERTIES");
-        if(envProps != null) {
+        if (envProps != null) {
             try {
-              producerProps.load(new StringReader(envProps));
+                producerProps.load(new StringReader(envProps));
             } catch (Exception e) {
-              logger.error("Unable to load environment properties", e);
+                logger.error("Unable to load environment properties", e);
             }
-          }
-          
-        if (producerProps.getProperty("client.id") == null) {
-             producerProps.setProperty("client.id", "producer-" + System.getenv("HOSTNAME"));
         }
-        
+
+        if (producerProps.getProperty("client.id") == null) {
+            producerProps.setProperty("client.id", "producer-" + System.getenv("HOSTNAME"));
+        }
+
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
-        
+
         event.getServletContext().setAttribute("producerProps", producerProps);
         event.getServletContext().setAttribute("kafkaProducer", producer);
-        
+
         logger.info("added kafkaProducer to ServletContext");
-        
+
         // print logback internal state
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         StatusPrinter.print(lc);
     }
-    
+
     public void contextDestroyed(ServletContextEvent event) {
     }
 }

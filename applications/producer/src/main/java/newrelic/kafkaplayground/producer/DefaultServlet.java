@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "DefaultServlet", urlPatterns = {""}, loadOnStartup = 1) 
+@WebServlet(name = "DefaultServlet", urlPatterns = {""}, loadOnStartup = 1)
 public class DefaultServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         //response.getWriter().print("Hello, World!"); 
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
