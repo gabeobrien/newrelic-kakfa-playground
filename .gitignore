@@ -6,3 +6,4 @@ ansible.log
 tmpinventory
 tmp
 s3.backend.tf
+.DS_Store
