@@ -1,30 +1,28 @@
 package newrelic.kafkaplayground.producer;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-import java.util.Properties;
-import javax.servlet.ServletException;
+import com.newrelic.api.agent.DistributedTracePayload;
+import com.newrelic.api.agent.NewRelic;
+import com.newrelic.api.agent.Token;
+import com.newrelic.api.agent.Trace;
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.clients.producer.Callback;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.newrelic.api.agent.DistributedTracePayload;
-import com.newrelic.api.agent.NewRelic;
-import com.newrelic.api.agent.Trace;
-import com.newrelic.api.agent.Token;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
+import java.util.UUID;
 
 @WebServlet(name = "MessageServlet", urlPatterns = {"/sendmessage"}, loadOnStartup = 1, initParams={
 @WebInitParam(name="applicationTopicName", value="application-messages")}) 

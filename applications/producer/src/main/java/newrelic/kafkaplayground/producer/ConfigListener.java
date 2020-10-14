@@ -1,24 +1,18 @@
 package newrelic.kafkaplayground.producer;
 
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.annotation.WebListener;
-import java.util.Properties;
-import java.util.Arrays;
-import java.io.StringReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
 import newrelic.kafkaplayground.common.util.PropertiesLoader;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.util.StatusPrinter;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Properties;
 
 @WebListener
 public class ConfigListener implements ServletContextListener {
