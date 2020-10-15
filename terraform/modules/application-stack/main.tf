@@ -34,4 +34,8 @@ resource "aws_instance" "swarm_nodes" {
     Project       = var.project_name
     DisplayName   = "swarm-${count.index}"
   }
+  
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }

@@ -34,6 +34,10 @@ resource "aws_instance" "zookeeper_nodes" {
     Project     = var.project_name
     DisplayName = "zookeeper-node-${count.index}"
   }
+  
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }
 
 resource "aws_instance" "kafka_brokers" {
@@ -51,5 +55,9 @@ resource "aws_instance" "kafka_brokers" {
     broker_id   = "${count.index}"
     Project     = var.project_name
     DisplayName = "kafka-broker-${count.index}"
+  }
+  
+  lifecycle {
+    ignore_changes = [ami]
   }
 }

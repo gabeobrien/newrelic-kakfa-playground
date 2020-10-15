@@ -11,34 +11,6 @@ resource "aws_security_group" "kafka_playground_sg" {
   }
 
   ingress {
-    from_port   = 2181
-    to_port     = 2181
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "ZooKeeper"
-  }
-  ingress {
-    from_port   = 2888
-    to_port     = 2888
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "ZooKeeper"
-  }
-  ingress {
-    from_port   = 3888
-    to_port     = 3888
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "ZooKeeper"
-  }
-  ingress {
-    from_port   = 9092
-    to_port     = 9092
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Kafka Brokers"
-  }
-  ingress {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
@@ -51,12 +23,6 @@ resource "aws_security_group" "kafka_playground_sg" {
     protocol    = "udp"
     self        = true
     description = "Internal security group. Allow everything."
-  }
-  ingress {
-    from_port   = -1
-    to_port     = -1
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
     from_port   = 0
