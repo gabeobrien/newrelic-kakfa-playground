@@ -8,13 +8,9 @@ The diagram above shows the flow of control in creating, provisioning, and confi
 
 In summary:
 
-- Everything is managed from a "control node" by applying Terraform configurations and executing Ansible playbooks.  It exists independently of the cluster itself.  This could be your local laptop, an EC2 instance in your account, or any host that can access both the AWS api and the resources that it creates.  More info in the "Bulding Your Cluster" document.
-- A Terraform configuration is applied to your AWS account that will create the following resources:
-    - A security group that by default has port 22 exposed to the world
-    - A group of EC2 instances that will run Zookeeper
-    - A group of EC2 instances that will run Kafka
-    - A group of EC2 instances that will run Docker Swarm
-- Following, Ansible playbooks are run to:
+- Everything is managed from a "control node" by applying Terraform configurations and executing Ansible playbooks.  It exists independently of the cluster itself.  This could be your local laptop, an EC2 instance in your account, or any host that can access both the AWS api and the resources that it creates.
+- A Terraform configuration is applied to your AWS account that will create several EC2 instances and a security group that is applied to them.
+- Ansible Playbooks are then used to:
     - Install the New Relic Infrastructure Agent
     - Install Zookeeper
     - Install Kafka
@@ -53,13 +49,13 @@ If you are receiving errors about missing or mismatched Python packages, particu
 ### Step 4: Configure/Verify your AWS credentials
 The Terraform CLI uses the AWS API to create all of the infrastructure in the cluster.  Therefore, it requires the proper credentails to execute those API requests on your behalf.  View the [documentation for the Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) to understand the various methods you can use to provide your credentials.
 
-If you have previouly [configured the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html), you should already have a credentials file in `~/.aws/credentials`.  Terraform will automatically read a profile from there.
+If you have previously [configured the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html), you should already have a credentials file in `~/.aws/credentials`.  Terraform will automatically read a profile from there.
 
 ### Step 5: Configure/Create/Verify your AWS Keypair
 After the infrastructure has been created by Terraform, we'll use Ansible to install and configure all of the software on each instance.  This is done by connecting to each host via SSH which requires the private key portion of an [EC2 key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) to be present on the control node.  Because the infrastructure is being created via automation (as opposed to using the UI), the key pair must exist before you attempt to create the infrastructure.  Either choose an existing key pair, or create one specifically for this cluster.  Be sure you have downloaded the private key `.pem` file, and make note of the key pair name.
 
 ## Creating the Infrastructure
-Once your control node is properly configured, you'll use the Terraform CLI to create all of the infrastructure in AWS.  All of the Terraform for the project are in the `terraform` subdirectory.
+Once your control node is properly configured, you'll use the Terraform CLI to create all of the infrastructure in AWS.  All of the Terraform configurations for the project are in the `terraform` subdirectory.
 
 ### Step 1: Configure Your Playground
 Begin by `cd`-ing into the `terraform/playground` directory.
@@ -67,7 +63,7 @@ Begin by `cd`-ing into the `terraform/playground` directory.
 Copy the file named `terraform.tfvars.sample` to `terraform.tfvars`.  Terraform will read this file and set any variables it contains, overriding any provided defaults.  Open the file and replace the sample values with your own.
 At minimun, you need to provide an AWS region, a New Relic License Key, and the name of the key pair that you'll be using.  **This is also where you can override the default settings for the size and number of nodes in the cluster.**  In fact, you can override any variable that is declared in `variables.tf`.
 
-By default, Terraform will create all of the resources in your default VPC.  If you want to use a different VPC, you must create and properly configure it beforehand and override the `vpc_id` variable.
+By default, Terraform will create all of the resources in your default VPC.  If you want to use a different VPC, you must create and properly configure one beforehand and override the `vpc_id` variable with the VPC's id.
 
 ### Step 2: Initialize Terraform
 Within the `terraform/playground` directory, run:
@@ -82,7 +78,7 @@ Within the same directory, run:
 ```
 Terraform will determine what needs to be created (at this point, that should be everything), and will ask you to verify before applying the changes.  Confirm, and wait while the resources are created.
 
-At any time you can verify what terraform has created by running `terraform show`
+At any time you can verify what Terraform has created by running `terraform show`
 
 All of the resources created by this configuration can be destroyed with `terraform destroy`
 
