@@ -1,4 +1,4 @@
-# Builiding your cluster
+# Provisioning the Infrastructure
 
 ## How it works
 
