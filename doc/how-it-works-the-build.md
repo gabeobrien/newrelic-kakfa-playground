@@ -83,7 +83,7 @@ At any time you can verify what Terraform has created by running `terraform show
 All of the resources created by this configuration can be destroyed with `terraform destroy`
 
 ## Installing the software
-Now we'll use Ansible to install and configure all of the software on the hosts we just created.  You'll notice that in addition to creating all infrastructure, there is a directory in `terraform/playground` name `output`.  In it should should be a file named `ansible_hosts.yml`.   This is an [Ansible inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html) that we'll use in all of the `ansible_playbook` commands going forward.   Additionally, we'll have to pass in the path to the private key file so Ansible can connect to each of the hosts.
+Now we'll use Ansible to install and configure all of the software on the hosts we just created.  After creating all the resources, Terraform will create an [Ansible inventory file](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html) that we'll use in all of the `ansible_playbook` commands going forward. It is located in `terraform/playground/output/ansible_hosts.yml`
 
 ### Step 1: Install New Relic Infrastructure
 `cd` into the `ansible-playbooks` directory within the repo.
@@ -92,6 +92,7 @@ Run the following command:
 ```bash
 > ansible_playbook -i ../terraform/playground/output/ansible_hosts.yml --private-key=path/to/your/key.pem newrelic-infrastructure.yml
 ```
+Notice that you must provide the path to the Ansible inventory file with the `-i` swtich and the path to your private key with the `--private-key` switch.
 
 This will install the New Relic Infrastructure Agent on all of the hosts in the inventory.
 
