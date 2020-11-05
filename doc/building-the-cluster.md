@@ -104,13 +104,7 @@ Run the following command:
 > ansible_playbook -i ../terraform/playground/output/ansible_hosts.yml --private-key=path/to/your/key.pem zookeeper.yml
 ```
 
-### Step 3: Install Zookeeper
-Run the following command:
-```bash
-> ansible_playbook -i ../terraform/playground/output/ansible_hosts.yml --private-key=path/to/your/key.pem zookeeper.yml
-```
-
-### Step 4: Install Kafka
+### Step 3: Install Kafka
 Run the following command:
 ```bash
 > ansible_playbook -i ../terraform/playground/output/ansible_hosts.yml --private-key=path/to/your/key.pem kafka-brokers.yml
