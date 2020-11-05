@@ -152,4 +152,10 @@ Once the applications are deployed, verify that messages are passing through the
 - View distributed traces for either application.  Verify that the traces contain spans from both the producer and consumer and show the passing of messages between them through the Kafka topic.  Click on the spans and view the attributes that are attached to them identifying the topic, partition, and offset.
 - View logs from both applications.  This can be done via the Logs UI, or by clicking "View Logs" when viewing a Distributed Trace, in which case you can see the logs that were emitted in-context for that individual trace.
 
-If you'd like to experiment with features or simulate some other messaging use cases, simply edit the code in the `applications` directory and run the `application-stack.yml` playbook. By adding the `deploy` tag, it will only run the tasks that build and deploy the application.  This is all done on the Swarm manager node, so there is no need to install Java nor Docker.
+If you'd like to experiment with features or simulate some other messaging use cases, simply edit the code in the `applications` directory and run the `application-stack.yml` playbook. By adding the `deploy` tag, it will only run the tasks that build and deploy the application.
+
+```bash
+> ansible_playbook -i ../terraform/playground/output/ansible_hosts.yml --private-key=path/to/your/key.pem --tags "deploy" application-stack.yml
+```
+
+This is all done on the Swarm manager node, so there is no need to install Java nor Docker.
