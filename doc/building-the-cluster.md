@@ -121,8 +121,8 @@ Proceed with installing the applications to generate message throughput.
 
 # Installing the applications
 Within the `applications` directory is the source code for two applications:
-- `kafka-playground-producer`: a minimimal RESTful web service that receives requests at an HTTP endpoint and produces a message to a Kafka topic named `application-messages`
-- `kafka-playground-consumer`: a standalone application that reads and processes messages from the `application-messages` topic.
+- `producer`: a minimimal RESTful web service that receives requests at an HTTP endpoint and produces a message to a Kafka topic named `application-messages`
+- `consumer`: a standalone application that reads and processes messages from the `application-messages` topic.
 
 Additionally, the directory contains all of the configuration files for deploying the applications (plus a load generator) to the Docker Swarm cluster we created previously.
 
@@ -142,7 +142,7 @@ To run it:
 Once the applications are deployed, verify that messages are passing through the topic:
 
 - Revisit the Kafka broker entities and the Kafka integration dashboard.  You should see data now.
-- Verify that you have both applications, `kafka-playground-producer` and `kafka-playground-consumer`, in the list of services in the Entity Explorer.  Verify that both are receiving throughput and are processsing transactions
+- Verify that you have both applications, `newrelic-kafka-playground-producer` and `newrelic-kafka-playground-consumer`, in the list of services in the Entity Explorer.  Verify that both are receiving throughput and are processsing transactions
 - View distributed traces for either application.  Verify that the traces contain spans from both the producer and consumer and show the passing of messages between them through the Kafka topic.  Click on the spans and view the attributes that are attached to them identifying the topic, partition, and offset.
 - View logs from both applications.  This can be done via the Logs UI, or by clicking "View Logs" when viewing a Distributed Trace, in which case you can see the logs that were emitted in-context for that individual trace.
 
