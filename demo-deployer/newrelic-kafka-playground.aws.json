@@ -1,0 +1,48 @@
+{
+    "resources": [
+      {
+        "id": "zk1",
+        "display_name": "Zookeeper1",
+        "provider": "aws",
+        "type": "ec2",
+        "size": "t3.small",
+        "ami_name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+        "user_name": "ubuntu"
+      },
+      {
+        "id": "kf1",
+        "display_name": "Kafka1",
+        "provider": "aws",
+        "type": "ec2",
+        "size": "t3a.small",
+        "ami_name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+        "user_name": "ubuntu"
+      },
+      {
+        "id": "kf2",
+        "display_name": "kafka2",
+        "provider": "aws",
+        "type": "ec2",
+        "size": "t3a.small",
+        "ami_name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+        "user_name": "ubuntu"
+      }
+    ],
+    
+    "instrumentations": {
+      "resources": [
+        {
+          "id": "nr_infra",
+          "resource_ids": ["zk1","kf1","kf2"],
+          "provider": "newrelic",
+          "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
+          "deploy_script_path": "deploy/linux/roles",
+          "version": "1.13.2"
+        }
+      ]
+    },
+    
+    "global_tags": {
+      "project": "kafka_demotron_v3"
+    }
+}
