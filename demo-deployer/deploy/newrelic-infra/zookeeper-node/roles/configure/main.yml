@@ -1,0 +1,20 @@
+---
+- name: Install New Relic Infrastructure on Zookeeper Nodes
+  become: yes
+  tags:
+    - zookeeper
+  roles:
+    - name: newrelic.newrelic-infra
+      vars:
+        nrinfragent_config:
+          license_key: "{{ new_relic_license_key }}"
+          log_file: /var/log/nr-infra.log
+          log_to_stdout: false
+          log_format: json
+          display_name: "{{ resource_display_name }}"
+          custom_attributes: "{{ tags }}"
+    - name: ../../../../../../ansible-playbooks/roles/logging
+      vars:
+        logging_tag_name: zookeeper
+        server_log: /var/log/zookeeper/server.log
+    - name: newrelic-kafka-integration

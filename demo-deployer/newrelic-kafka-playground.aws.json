@@ -7,7 +7,11 @@
         "type": "ec2",
         "size": "t3.small",
         "ami_name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
-        "user_name": "ubuntu"
+        "user_name": "ubuntu",
+        "tags": {
+          "role": "zookeeper",
+          "zookeeper_my_id": "0"
+        }
       },
       {
         "id": "kf1",
@@ -16,7 +20,11 @@
         "type": "ec2",
         "size": "t3a.small",
         "ami_name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
-        "user_name": "ubuntu"
+        "user_name": "ubuntu",
+        "tags": {
+          "role": "kafka_broker",
+          "kafka_broker_id": "0"
+        }
       },
       {
         "id": "kf2",
@@ -25,7 +33,11 @@
         "type": "ec2",
         "size": "t3a.small",
         "ami_name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
-        "user_name": "ubuntu"
+        "user_name": "ubuntu",
+        "tags": {
+          "role": "kafka_broker",
+          "kafka_broker_id": "1"
+        }
       }
     ],
     
@@ -33,16 +45,20 @@
       "resources": [
         {
           "id": "nr_infra",
-          "resource_ids": ["zk1","kf1","kf2"],
+          "resource_ids": ["zk1"],
           "provider": "newrelic",
-          "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
-          "deploy_script_path": "deploy/linux/roles",
-          "version": "1.13.2"
+          "local_source_path": "/usr/local/app/",
+          "deploy_script_path": "deploy/newrelic-infra/zookeeper-node/roles",
+          "version": "1.13.2",
+          "params": {
+            "new_relic_license_key": "[credential:newrelic:license_key]"
+          }
         }
       ]
     },
     
     "global_tags": {
-      "project": "kafka_demotron_v3"
+      "project": "demtoron-v3-kafka-playground",
+      "usecase": "kafka"
     }
 }
