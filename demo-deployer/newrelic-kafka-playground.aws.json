@@ -47,7 +47,7 @@
           "id": "nr_infra",
           "resource_ids": ["zk1"],
           "provider": "newrelic",
-          "local_source_path": "/usr/local/app/",
+          "local_source_path": "/usr/local/app/demo-deployer",
           "deploy_script_path": "deploy/newrelic-infra/zookeeper-node/roles",
           "version": "1.13.2",
           "params": {

@@ -1,0 +1,16 @@
+---
+dependencies:
+  - role: newrelic.newrelic-infra
+    vars:
+      nrinfragent_config:
+        license_key: "{{ new_relic_license_key }}"
+        log_file: /var/log/nr-infra.log
+        log_to_stdout: false
+        log_format: json
+        display_name: "{{ resource_display_name }}"
+        custom_attributes: "{{ tags }}"
+  - role: logging
+    vars:
+      logging_tag_name: zookeeper
+      server_log: /var/log/zookeeper/server.log
+  - role: newrelic-kafka-integration
