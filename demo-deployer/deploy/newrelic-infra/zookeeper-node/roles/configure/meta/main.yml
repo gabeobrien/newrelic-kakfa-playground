@@ -1,6 +1,7 @@
 ---
 dependencies:
   - role: newrelic.newrelic-infra
+    become: yes
     vars:
       nrinfragent_config:
         license_key: "{{ new_relic_license_key }}"
@@ -10,7 +11,9 @@ dependencies:
         display_name: "{{ resource_display_name }}"
         custom_attributes: "{{ tags }}"
   - role: logging
+    become: yes
     vars:
       logging_tag_name: zookeeper
       server_log: /var/log/zookeeper/server.log
   - role: newrelic-kafka-integration
+    become: yes
