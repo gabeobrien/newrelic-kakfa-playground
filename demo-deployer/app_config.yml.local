@@ -1,1 +1,0 @@
-ansibleRolesPath: "$HOME/.ansible/roles:/usr/local/app/ansible-playbooks/roles"

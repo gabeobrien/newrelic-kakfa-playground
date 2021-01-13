@@ -10,10 +10,10 @@ dependencies:
         log_format: json
         display_name: "{{ resource_display_name }}"
         custom_attributes: "{{ tags }}"
-  - role: logging
+  - role: '../logging'
     become: yes
     vars:
       logging_tag_name: zookeeper
       server_log: /var/log/zookeeper/server.log
-  - role: newrelic-kafka-integration
+  - role: '../newrelic-kafka-integration'
     become: yes

@@ -1,5 +1,23 @@
 [![New Relic Experimental header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Experimental.png)](https://opensource.newrelic.com/oss-category/#new-relic-experimental)
 
+
+# Demo-Deployer Updates
+
+Copy the kafka.json config file from this repo into your demo-deployer/configs directory.  If the kafka.json file was public (not in a branch) we could reference it directly in the 'ruby main.rb' command.
+
+Docker command (update 'PATH_TO_DEPLOYER' to the path of your demo-deployer configs dir):
+
+    docker run --entrypoint /bin/bash  -it -v PATH_TO_DEPLOYER/configs/:/mnt/deployer/configs/ ghcr.io/newrelic/deployer -c /bin/bash
+
+In the container run (if we get this all working we can add the galaxy stuff to the demo-deployer docker image):
+
+     ansible-galaxy install newrelic.newrelic-infra
+     ruby main.rb -d configs/kafka.json
+
+
+
+
+
 # New Relic Kafka Playground
 
 This project contains a set of Terraform configurations and Ansible playbooks that will deploy a complete Kafka cluster (including Zookeeper), as well as a set of producer and consumer applications running in a Docker Swarm cluster.   It is fully configured and instrumented with New Relic.
